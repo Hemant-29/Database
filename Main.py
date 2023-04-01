@@ -1,8 +1,10 @@
 import json
+import os
 user_details=[]
 
-with open("./user_data.json") as json_object:
-	user_details=json.load(json_object)
+if os.path.exists("./user_data.json"):
+	with open("./user_data.json") as json_object:
+		user_details=json.load(json_object)
 
 citynames=[]
 with open ("./cities.txt") as file_object:
@@ -62,13 +64,19 @@ def main_menu():
 	if inp.lower()=="q":
 		None
 	elif inp.lower()=="s":
-		for i in user_details:
-			print(i[0],i[1],i[2])
+		if user_details==[]:
+			print("No details found in the database")
+		else:
+			curr_num=0
+			for i in user_details:
+				curr_num+=1
+				print(f"{curr_num})",i[0],i[1],i[2])
 		print()
 		main_menu()
 	else:
 		val=input_details()
 		user_details.append(val)
+		dump_details()
 		main_menu()
 		
 
@@ -90,8 +98,9 @@ def find_match(name,name_list):
 	else:
 		return None
 
-
+def dump_details():
+	with open("./user_data.json",'w') as json_object:
+		json.dump(user_details,json_object)
 
 main_menu()
-with open("./user_data.json",'w') as json_object:
-	json.dump(user_details,json_object)
+dump_details()
